@@ -1,0 +1,447 @@
+// Q1. Delete the elements in an linked list whose sum is equal to zero   
+console.clear()
+class ListNode{
+    constructor(val){
+        this.val = val
+        this.next = null
+    }
+}
+function getNode(data){
+    let temp = new ListNode(data)
+    temp.next = null
+    return temp
+}
+function printList(head){
+    while (head.next){
+        console.log(head.val)
+        head = head.next
+        
+    }
+    console.log(head.val)
+}
+function removeZeroSum(head, K){
+    let root = new ListNode(0)
+    root.next = head
+    let umap = new Map();
+  umap.set(0,root)
+    let sum = 0
+    while (head != null){
+        sum += head.val
+        if (umap.has(sum - K) == true){
+            let prev = umap.get(sum - K)
+            let start = prev
+            let aux = sum
+            sum = sum - K
+            while (prev != head){
+                prev = prev.next
+                aux += prev.val
+                if (prev != head)
+                    umap.delete(aux)
+            }
+            start.next = head.next
+        }
+        else
+            umap.set(sum,head)
+ 
+        head = head.next
+    }
+    return root.next
+}
+let head = getNode(1)
+head.next = getNode(2)
+head.next.next = getNode(-3)
+head.next.next.next = getNode(3)
+head.next.next.next.next = getNode(1)
+let K = 5
+head = removeZeroSum(head, K)
+if(head != null)
+    printList(head)
+
+--------------------------------------------------------------------------------------------------------------------- 
+
+// Q2. Reverse a linked list in groups of given size.                         
+
+console.clear()
+class Node{
+   constructor(data){
+      this.value = data;
+      this.next = null;
+   }
+}
+function print(head){
+   var temp = head;
+   if(head == null){
+      console.log("The given linked list is empty");
+   } else {
+      var ans = ""
+      while(temp.next != null){
+         ans += temp.value;
+         ans += " -> "
+         temp = temp.next
+      }
+      ans += temp.value
+      ans += " -> null"
+   }
+   console.log(ans)
+   }
+function add(data, head, tail){
+   return tail.next = new Node(data);
+} 
+function reverseGroup(head, number){
+   if (!head || number == 1){
+      return head;
+   }
+   var temp = new Node(); 
+   temp.value = -1;
+   temp.next = head;
+   var prev = temp;
+   var cur = temp;
+   var next = temp;
+   var len = 0;
+   while (cur) {
+      len++;
+      cur = cur.next;
+   }
+   while (next) {
+      cur = prev.next;
+      next = cur.next;
+      var toL = len > number ? number : len - 1;
+      for (var i = 1; i < toL; i++) {
+         cur.next = next.next;
+         next.next = prev.next;
+         prev.next = next;
+         next = cur.next;
+      }
+      prev = cur;
+      len -= number;
+   }
+   return temp.next;
+}
+var head  = new Node(1)
+var tail  = head
+tail = add(2,head, tail)
+tail = add(3,head, tail)
+tail = add(4,head, tail)
+tail = add(5,head, tail)
+tail = add(6,head, tail)
+tail = add(7,head, tail)
+tail = add(8,head, tail)
+var number = 3
+console.log("The given linked list is: ")
+print(head)
+head = reverseGroup(head,number)
+console.log("The Linked list after reversing elements in groups of 3 is: ")
+print(head)
+
+--------------------------------------------------------------------------------------------------------------------- 
+
+
+// Q3. Merge a linked list into another linked list at alternate positions.             
+
+console.clear()
+class Node 
+{ 
+    constructor()
+    {
+        this.data = 0;
+        this.next = null;
+    }
+};   
+function push(head_ref, new_data) 
+{ 
+    var new_node = new Node();
+    new_node.data = new_data; 
+    new_node.next = (head_ref); 
+    (head_ref) = new_node;
+    return head_ref;
+  
+}   
+function printList(head) 
+{ 
+    var temp = head; 
+    while (temp != null) 
+    { 
+        console.log( temp.data + " "); 
+        temp = temp.next; 
+    } 
+    
+}  
+function merge(p, q) 
+{ 
+    var p_curr = p, q_curr = q; 
+    var p_next, q_next; 
+    while (p_curr != null &&  q_curr != null) 
+    {  
+        p_next = p_curr.next; 
+        q_next = q_curr.next; 
+        q_curr.next = p_next;  
+        p_curr.next = q_curr;  
+        p_curr = p_next; 
+        q_curr = q_next; 
+    } 
+    q = q_curr;  
+    return q;
+} 
+  
+var p = null, q = null; 
+p = push(p, 3); 
+p = push(p, 2); 
+p = push(p, 1); 
+console.log( "First Linked List:"); 
+printList(p); 
+q = push(q, 8); 
+q = push(q, 7); 
+q = push(q, 6); 
+q = push(q, 5); 
+q = push(q, 4); 
+console.log("Second Linked List:"); 
+printList(q); 
+q = merge(p, q); 
+console.log("Modified First Linked List:"); 
+printList(p); 
+console.log("Modified Second Linked List:"); 
+printList(q);
+
+--------------------------------------------------------------------------------------------------------------------- 
+
+
+// Q4. In an array, Count Pairs with given sum
+
+console.clear()
+function getPairsCount(arr, n, sum)
+{
+    let count = 0; 
+    for (let i = 0; i < n; i++)
+        for (let j = i + 1; j < n; j++)
+            if (arr[i] + arr[j] == sum)
+                count++;
+  
+    return count;
+}
+    let arr = [ 10, 12, 10, 15, -1, 7, 6, 5, 4, 2, 1, 1, 1];
+    let n = arr.length;
+    let sum = 11;
+    console.log("Count of pairs is " + getPairsCount(arr, n, sum));
+
+--------------------------------------------------------------------------------------------------------------------- 
+
+
+// Q5.  Find duplicates in an array
+
+console.clear()
+function find_duplicate_in_array(arra1) {
+        var object = {};
+        var result = [];
+  arra1.forEach(function (item) {
+          if(!object[item])
+              object[item] = 0;
+            object[item] += 1;
+        })
+  for (var prop in object) {
+           if(object[prop] >= 2) {
+               result.push(prop);
+           }
+        }
+        return result;
+    }
+console.log(find_duplicate_in_array([1, 2, -2, 4, 5, 4, 7, 8, 7, 7, 71, 3, 6]));
+
+              OR
+          ----------
+const numbers = [1, 2, 3, 2, 4, 5, 5, 6];
+const set = new Set(numbers);
+const duplicates = numbers.filter(item => {
+    if (set.has(item)) {
+        set.delete(item);
+    } else {
+        return item;
+    }
+});
+console.log(duplicates);
+
+--------------------------------------------------------------------------------------------------------------------- 
+
+// Q6. Find the Kth largest and Kth smallest number in an array
+
+console.clear()
+function kthSmallest(arr, N, K)
+{
+    // Sort the given array
+    arr.sort((a,b) => a-b);
+ 
+    return arr[N - 1], arr[K - 1]
+}
+ 
+// Driver program to test above methods
+    let arr = [12, 3, 5, 7, 19];
+    let N = arr.length, K = 2;
+    console.log("K'th smallest element is " + kthSmallest(arr, N, K));
+             OR
+           -------
+function Kthlargest(arra,highest){
+    let x = 0;
+    let y = 0;
+    let z = 0;
+    let temp = 0;
+    const tnum = arra.length;
+    let flag = false;
+    let result = false;
+
+    while(x < tnum){
+        y = x + 1; 
+        
+        if(y < tnum){
+            for(z = y; z < tnum; z++){
+                
+                if(arra[x] < arra[z]){
+                    temp = arra[z];
+                    arra[z] = arra[x];
+                    arra[x] = temp;
+                    flag = true; 
+                }else{
+                    continue;
+                }	
+            }					
+        }
+        
+        if(flag){
+            flag = false;
+        }else{
+            x++; 
+            if(x === highest){ 
+                result = true;
+            }	
+        }
+        if(result){
+            break;
+        }
+    }
+    return (arra[(highest - 1)]);
+}		
+console.log(Kthlargest([ 43, 56, 23, 89, 88, 90, 99, 652], 4));
+
+
+--------------------------------------------------------------------------------------------------------------------- 
+
+// Q7. Move all the negative elements to one side of the array.
+console.clear()
+function move(arr){
+    arr.sort();
+}  
+let arr = [ -1, 2, -3, 4, 5, -6, -7, 8];
+move(arr);
+for (let e of arr)
+    console.log(e);
+
+--------------------------------------------------------------------------------------------------------------------- 
+
+
+// Q8. Reverse a string using a stack data structure.
+console.clear()
+
+function the_helper(str)
+{
+  let s = [];
+  for (let i = 0; i < str.length; i++) {
+    s.push(str.charAt(i));
+  }
+  str = '';
+  while (s.length > 0) {
+    str += s.pop();
+  }
+  return str;
+}
+let str = 'Edyoda';
+str = the_helper(str);
+console.log('Reversed string is: ' + str);
+
+--------------------------------------------------------------------------------------------------------------------- 
+
+
+// Q9. Evaluate a postfix expression using stack.
+
+console.clear()
+function evaluatePostfix(exp)
+{
+        let stack=[];
+        for(let i=0;i<exp.length;i++)
+        {
+            let c=exp[i];
+            if(! isNaN( parseInt(c) ))
+            stack.push(c.charCodeAt(0) - '0'.charCodeAt(0));
+            else
+            {
+                let val1 = stack.pop();
+                let val2 = stack.pop();  
+                switch(c)
+                {
+                    case '+':
+                    stack.push(val2+val1);
+                    break;
+                      
+                    case '-':
+                    stack.push(val2- val1);
+                    break;
+                      
+                    case '/':
+                    stack.push(val2/val1);
+                    break;
+                      
+                    case '*':
+                    stack.push(val2*val1);
+                    break;
+              }
+            }
+        }
+        return stack.pop();  
+}
+let exp="23*45+*";
+console.log("postfix evaluation: "+evaluatePostfix(exp));
+
+--------------------------------------------------------------------------------------------------------------------- 
+
+// Q10.  Implement a queue using the stack data structure.
+
+console.clear()
+class Queue{
+      
+constructor()
+{
+    this.s1 = [];
+    this.s2 = [];
+}
+enQueue(x)
+{
+    while (this.s1.length != 0)
+    { 
+        this.s2.push(this.s1.pop()); 
+    }  
+    this.s1.push(x); 
+    while (this.s2.length != 0) 
+    { 
+        this.s1.push(this.s2.pop());  
+    } 
+}
+deQueue() 
+{
+    if (this.s1.length == 0) 
+    { 
+       console.log("Q is Empty"); 
+    } 
+    let x = this.s1[this.s1.length - 1]; 
+    this.s1.pop(); 
+    return x; 
+}
+}
+let q = new Queue(); 
+q.enQueue(8); 
+q.enQueue(6); 
+q.enQueue(4);
+q.enQueue(2);
+  
+console.log(q.deQueue() ); 
+console.log(q.deQueue() );
+console.log(q.deQueue() );
+console.log(q.deQueue() );
+
+
