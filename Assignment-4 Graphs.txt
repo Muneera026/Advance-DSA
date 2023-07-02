@@ -1,0 +1,357 @@
+// Q1. Breadth First Traversal for a Graph
+
+class Graph
+{
+    constructor(v)
+    {
+        this.V = v;
+        this.adj = new Array(v);
+        for(let i = 0; i < v; i++)
+            this.adj[i] = [];
+    }
+    addEdge(v, w)
+    {
+        this.adj[v].push(w);
+    }
+    BFS(s)
+    {
+        let visited = new Array(this.V);
+        for(let i = 0; i < this.V; i++)
+            visited[i] = false;
+             
+        let queue=[];
+             
+        visited[s]=true;
+        queue.push(s);
+             
+        while(queue.length>0)
+        {
+            s = queue[0];
+            console.log(s+" ");
+            queue.shift();
+                 
+            this.adj[s].forEach((adjacent,i) => {
+                if(!visited[adjacent])
+                {
+                    visited[adjacent]=true;
+                    queue.push(adjacent);
+                }
+            });
+        }
+    }
+}
+    g = new Graph(4);
+    g.addEdge(0, 1);
+    g.addEdge(0, 2);
+    g.addEdge(1, 2);
+    g.addEdge(2, 0);
+    g.addEdge(2, 3);
+    g.addEdge(3, 3);
+     
+    console.log("BFS Traversal:");
+     
+    g.BFS(2);
+--------------------------------------------------------------------------------------------------------------------- 
+
+// Q2. Depth First Traversal for a Graph
+
+class Graph
+{
+    constructor(v)
+    {
+        this.V = v;
+        this.adj = new Array(v);
+        for(let i = 0; i < v; i++)
+            this.adj[i] = [];
+    }
+    addEdge(v, w)
+    {
+        this.adj[v].push(w);
+    }
+    DFSUtil(v, visited)
+    {
+        visited[v] = true;
+        console.log(v + " ");
+  
+        for(let i of this.adj[v].values())
+        {
+            let n = i
+            if (!visited[n])
+                this.DFSUtil(n, visited);
+        }
+    }     
+    DFS(v)
+    {      
+        let visited = new Array(this.V);
+        for(let i = 0; i < this.V; i++)
+            visited[i] = false;
+        this.DFSUtil(v, visited);
+    }
+}
+ 
+
+g = new Graph(4);
+  
+g.addEdge(0, 1);
+g.addEdge(0, 2);
+g.addEdge(1, 2);
+g.addEdge(2, 0);
+g.addEdge(2, 3);
+g.addEdge(3, 3);
+ 
+console.log("DFS Traversal:");
+ 
+g.DFS(1);
+
+
+--------------------------------------------------------------------------------------------------------------------- 
+
+// Q3. Count the number of nodes at given level in a tree using BFS
+
+class Node {
+  constructor(value) {
+    this.value = value;
+    this.left = null;
+    this.right = null;
+  }
+}
+
+function countNodesAtLevel(root, targetLevel) {
+  if (root === null) {
+    return 0;
+  }
+
+  let level = 0;
+  let count = 0;
+  const queue = [{ node: root, level: level }];
+
+  while (queue.length > 0) {
+    const { node, level } = queue.shift();
+
+    if (level === targetLevel) {
+      count++;
+    }
+
+    if (node.left !== null) {
+      queue.push({ node: node.left, level: level + 1 });
+    }
+
+    if (node.right !== null) {
+      queue.push({ node: node.right, level: level + 1 });
+    }
+  }
+
+  return count;
+}
+
+// Example usage
+const root = new Node(1);
+root.left = new Node(2);
+root.right = new Node(3);
+root.left.left = new Node(4);
+root.left.right = new Node(5);
+root.right.left = new Node(6);
+root.right.right = new Node(7);
+
+const targetLevel = 2;
+const count = countNodesAtLevel(root, targetLevel);
+console.log(`Number of nodes at level ${targetLevel}:`, count);
+
+--------------------------------------------------------------------------------------------------------------------- 
+
+// Q4. Count number of trees in a forest
+
+class Node {
+  constructor(value) {
+    this.value = value;
+    this.neighbors = [];
+  }
+}
+
+function countTreesInForest(nodes) {
+  let count = 0;
+  const visited = new Set();
+
+  for (let node of nodes) {
+    if (!visited.has(node)) {
+      count++;
+      dfs(node, visited);
+    }
+  }
+
+  return count;
+}
+
+function dfs(node, visited) {
+  visited.add(node);
+
+  for (let neighbor of node.neighbors) {
+    if (!visited.has(neighbor)) {
+      dfs(neighbor, visited);
+    }
+  }
+}
+
+// Example usage
+const node1 = new Node(1);
+const node2 = new Node(2);
+const node3 = new Node(3);
+const node4 = new Node(4);
+const node5 = new Node(5);
+
+node1.neighbors = [node2, node3];
+node4.neighbors = [node5];
+
+const forest = [node1, node2, node3, node4, node5];
+const treeCount = countTreesInForest(forest);
+console.log("Number of trees in the forest:", treeCount);
+
+
+--------------------------------------------------------------------------------------------------------------------- 
+
+// Q5.  Detect Cycle in a Directed Graph
+
+class Graph {
+  constructor(numVertices) {
+    this.numVertices = numVertices;
+    this.adjList = new Map();
+  }
+
+  addEdge(v, w) {
+    if (!this.adjList.has(v)) {
+      this.adjList.set(v, []);
+    }
+    this.adjList.get(v).push(w);
+  }
+
+  isCyclic() {
+    const visited = new Set();
+    const recStack = new Set();
+
+    for (let vertex of this.adjList.keys()) {
+      if (this.detectCycleUtil(vertex, visited, recStack)) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  detectCycleUtil(vertex, visited, recStack) {
+    visited.add(vertex);
+    recStack.add(vertex);
+
+    const neighbors = this.adjList.get(vertex);
+    for (let neighbor of neighbors) {
+      if (!visited.has(neighbor)) {
+        if (this.detectCycleUtil(neighbor, visited, recStack)) {
+          return true;
+        }
+      } else if (recStack.has(neighbor)) {
+        return true;
+      }
+    }
+
+    recStack.delete(vertex);
+    return false;
+  }
+}
+
+// Example usage
+const graph = new Graph(4);
+graph.addEdge(0, 1);
+graph.addEdge(0, 2);
+graph.addEdge(1, 2);
+graph.addEdge(2, 0);
+graph.addEdge(2, 3);
+graph.addEdge(3, 3);
+
+if (graph.isCyclic()) {
+  console.log("Graph contains a cycle");
+} else {
+  console.log("Graph does not contain a cycle");
+}
+
+--------------------------------------------------------------------------------------------------------------------- 
+Optional:
+
+// Q1.  **Implement n-Queen’s Problem
+
+function solveNQueens(n) {
+  const board = createBoard(n);
+  const solutions = [];
+
+  placeQueens(board, 0, solutions);
+
+  return solutions;
+}
+
+function createBoard(n) {
+  const board = [];
+  for (let i = 0; i < n; i++) {
+    board[i] = [];
+    for (let j = 0; j < n; j++) {
+      board[i][j] = ".";
+    }
+  }
+  return board;
+}
+
+function placeQueens(board, col, solutions) {
+  const n = board.length;
+  if (col === n) {
+    solutions.push(generateSolution(board));
+    return;
+  }
+
+  for (let row = 0; row < n; row++) {
+    if (isSafe(board, row, col)) {
+      board[row][col] = "Q";
+      placeQueens(board, col + 1, solutions);
+      board[row][col] = ".";
+    }
+  }
+}
+
+function isSafe(board, row, col) {
+  const n = board.length;
+
+  // Check if there is a queen in the same row
+  for (let i = 0; i < col; i++) {
+    if (board[row][i] === "Q") {
+      return false;
+    }
+  }
+
+  // Check if there is a queen in the upper diagonal
+  for (let i = row, j = col; i >= 0 && j >= 0; i--, j--) {
+    if (board[i][j] === "Q") {
+      return false;
+    }
+  }
+
+  // Check if there is a queen in the lower diagonal
+  for (let i = row, j = col; i < n && j >= 0; i++, j--) {
+    if (board[i][j] === "Q") {
+      return false;
+    }
+  }
+
+  return true;
+}
+
+function generateSolution(board) {
+  const n = board.length;
+  const solution = [];
+  for (let i = 0; i < n; i++) {
+    solution.push(board[i].join(""));
+  }
+  return solution;
+}
+
+// Example usage
+const n = 4;
+const solutions = solveNQueens(n);
+console.log(`Number of solutions for ${n}-Queens:`, solutions.length);
+console.log("Solutions:", solutions);
+
